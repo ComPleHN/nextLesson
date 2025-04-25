@@ -2,6 +2,7 @@
 
 import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
 import {useSearchParams, usePathname, useRouter} from 'next/navigation';
+import {debounce} from "@/app/lib/tools";
 
 export default function Search({placeholder}: { placeholder: string }) {
     //使用搜索参数钩子
@@ -10,7 +11,7 @@ export default function Search({placeholder}: { placeholder: string }) {
     const router = useRouter();
     const {replace} = router;
 
-    function handleSearch(term: string) {
+    const handleSearch = debounce((term: string) => {
         // TODO: Implement search functionality
         const params = new URLSearchParams(searchParams);
         if (term) {
@@ -19,7 +20,7 @@ export default function Search({placeholder}: { placeholder: string }) {
             params.delete('query');
         }
         replace(`${pathname}?${params.toString()}`);
-    }
+    }, 300)
 
 
     return (
